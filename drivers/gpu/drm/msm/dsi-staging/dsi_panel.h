@@ -38,6 +38,8 @@
 
 #define DSI_MODE_MAX 5
 
+#define BUF_LEN_MAX    256
+
 enum dsi_panel_rotation {
 	DSI_PANEL_ROTATE_NONE = 0,
 	DSI_PANEL_ROTATE_HV_FLIP,
@@ -123,6 +125,7 @@ struct dsi_backlight_config {
 	int en_gpio;
 	bool bl_remap_flag;
 	bool dcs_type_ss;
+	bool samsung_prepare_hbm_flag;
 	/* PWM params */
 	struct pwm_device *pwm_bl;
 	bool pwm_enabled;
@@ -232,17 +235,26 @@ struct dsi_panel {
 	enum dsi_dms_mode dms_mode;
 
 	bool sync_broadcast_en;
+	int power_mode;
+	enum dsi_panel_physical_type panel_type;
 
 	u32 panel_on_dimming_delay;
 	struct delayed_work cmds_work;
 	u32 last_bl_lvl;
 	s32 backlight_delta;
+	u32 backlight_pulse_threshold;
+	bool dc_enable;
+	bool backlight_pulse_flag; /* true = 4 pulse and false = 1 pulse */
 
+	bool hbm_enabled;
 	bool fod_hbm_enabled; /* prevent set DISPPARAM_DOZE_BRIGHTNESS_HBM/LBM in FOD HBM */
+	bool fod_dimlayer_enabled;
+	bool fod_dimlayer_hbm_enabled;
+	bool fod_ui_ready;
 	u32 doze_backlight_threshold;
 	u32 fod_off_dimming_delay;
-	ktime_t fod_hbm_off_time;
 	ktime_t fod_backlight_off_time;
+	ktime_t fod_hbm_off_time;
 
 	u32 panel_p3_mode;
 	u32 close_crc;
@@ -253,9 +265,13 @@ struct dsi_panel {
 	struct dsi_panel_cmd_set hbm_fod_on;
 	struct dsi_panel_cmd_set hbm_fod_off;
 
+	u8 panel_read_data[BUF_LEN_MAX];
+	struct dsi_read_config xy_coordinate_cmds;
+
 	bool fod_backlight_flag;
-	u32 fod_target_backlight;
 	bool fod_flag;
+	u32 fod_target_backlight;
+	bool fod_skip_flag; /* optimize to skip nolp command */
 	bool in_aod; /* set  DISPPARAM_DOZE_BRIGHTNESS_HBM/LBM only in AOD */
 
 	/* Display count */
@@ -272,8 +288,8 @@ struct dsi_panel {
 	u64 hbm_duration;
 	u64 hbm_times;
 
-	int power_mode;
-	enum dsi_panel_physical_type panel_type;
+	bool panel_dead_flag;
+	bool panel_max_frame_rate;
 };
 
 static inline bool dsi_panel_ulps_feature_enabled(struct dsi_panel *panel)

@@ -198,6 +198,7 @@ struct drm_device {
 	int doze_state;
 	int doze_brightness;
 	bool fp_quickon;
+	int pre_state;
 };
 
 #endif
