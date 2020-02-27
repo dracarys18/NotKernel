@@ -16295,7 +16295,7 @@ wlan_hdd_add_monitor_check(struct hdd_context *hdd_ctx,
 }
 #endif /* WLAN_FEATURE_PKT_CAPTURE */
 /* Register the module init/exit functions */
-module_init(hdd_module_init);
+late_initcall(hdd_module_init);
 module_exit(hdd_module_exit);
 
 MODULE_LICENSE("Dual BSD/GPL");
