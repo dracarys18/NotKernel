@@ -751,6 +751,7 @@ int dsi_panel_set_doze_backlight(struct dsi_display *display, u32 bl_lvl)
 	if (panel->fod_hbm_enabled || panel->fod_backlight_flag) {
 		pr_info("%s FOD HBM open, skip value:%u [hbm=%d][fod_bl=%d]\n", __func__,
 			bl_lvl, panel->fod_hbm_enabled, panel->fod_backlight_flag);
+		return rc;
 	}
 
 	if (bl_lvl > panel->doze_backlight_threshold) {
