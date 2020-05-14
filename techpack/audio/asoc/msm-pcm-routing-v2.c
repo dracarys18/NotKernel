@@ -1,3 +1,4 @@
+
 /* Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23954,12 +23955,14 @@ static int msm_routing_probe(struct snd_soc_platform *platform)
 	snd_soc_add_platform_controls(
 			platform, msm_routing_feature_support_mixer_controls,
 			ARRAY_SIZE(msm_routing_feature_support_mixer_controls));
+
 	snd_soc_add_platform_controls(platform,
 			port_multi_channel_map_mixer_controls,
 			ARRAY_SIZE(port_multi_channel_map_mixer_controls));
 
+#if 0
 	elliptic_add_platform_controls(platform);
-
+#endif
 	return 0;
 }
 
