@@ -64,7 +64,6 @@ function zipping() {
     zip -r9 NotKernel-Raphael-${TANGGAL}.zip *
     cd ..
 }
-sticker
 sendinfo
 compile
 zipping
