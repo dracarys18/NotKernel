@@ -307,10 +307,6 @@ static int max_sched_tunable_scaling = SCHED_TUNABLESCALING_END-1;
 #endif /* CONFIG_SMP */
 #endif /* CONFIG_SCHED_DEBUG */
 
-#ifndef CONFIG_SCHED_WALT
-static int sysctl_sched_boost = 0;
-#endif
-
 #ifdef CONFIG_COMPACTION
 static int min_extfrag_threshold;
 static int max_extfrag_threshold = 1000;
@@ -3414,24 +3410,6 @@ int proc_douintvec_capacity(struct ctl_table *table, int write,
 	return do_proc_dointvec(table, write, buffer, lenp, ppos,
 				do_proc_douintvec_capacity_conv, NULL);
 }
-
-#ifndef CONFIG_SCHED_WALT
-int sched_boost_handler(struct ctl_table *table, int write,
-		void __user *buffer, size_t *lenp,
-		loff_t *ppos)
-{
-	int ret;
-	unsigned int *data = (unsigned int *)table->data;
-
-	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-
-	if (ret || !write)
-		return ret;
-
-	pr_debug("%s set sb to %i\n", current->comm, *data);
-	return ret;
-}
-#endif
 
 #else /* CONFIG_PROC_SYSCTL */
 
