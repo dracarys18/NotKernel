@@ -1,0 +1,13 @@
+{
+  "kernel": {
+    "name": "NotKernel",
+    "version": "R1",
+    "link": "https://github.com/dracarys18/NotKernel/releases/download/R1/NotKernel-Raphael-2020-05-17-02.zip",
+    "changelog_url": "https://raw.githubusercontent.com/dracarys18/NotKernel/raphael-10/changelog",
+    "date": "2020-05-17",
+    "sha1": "F51353C07A2F492220719CE0B708D3DE10CBD523"
+  },
+  "support": {
+    "link": "https://t.me/notkernel"
+  }
+}
