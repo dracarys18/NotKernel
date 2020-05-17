@@ -56,7 +56,13 @@ function compile() {
 			     LD=ld.lld \
 			     CROSS_COMPILE=aarch64-linux-gnu- \
 			     CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+
+if [ `ls "$IMAGE" 2>/dev/null | wc -l` != "0" ]
+then
    cp out/arch/arm64/boot/Image.gz-dtb AnyKernel
+else
+   finerr
+fi
 }
 # Zipping
 function zipping() {
