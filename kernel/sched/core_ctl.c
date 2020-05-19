@@ -1213,6 +1213,7 @@ static struct cluster_data *find_cluster_by_first_cpu(unsigned int first_cpu)
 	return NULL;
 }
 
+#ifdef CONFIG_SCHED_WALT
 static int cluster_init(const struct cpumask *mask)
 {
 	struct device *dev;
@@ -1281,9 +1282,11 @@ static int cluster_init(const struct cpumask *mask)
 	kobject_init(&cluster->kobj, &ktype_core_ctl);
 	return kobject_add(&cluster->kobj, &dev->kobj, "core_ctl");
 }
+#endif
 
 static int __init core_ctl_init(void)
 {
+#ifdef CONFIG_SCHED_WALT
 	struct sched_cluster *cluster;
 	int ret;
 
@@ -1295,14 +1298,14 @@ static int __init core_ctl_init(void)
 			"core_ctl/isolation:dead",
 			NULL, core_ctl_isolation_dead_cpu);
 
-#ifdef CONFIG_SCHED_WALT
+
 	for_each_sched_cluster(cluster) {
 		ret = cluster_init(&cluster->cpus);
 		if (ret)
 			pr_warn("unable to create core ctl group: %d\n", ret);
 	}
-#endif
 
+#endif
 	initialized = true;
 	return 0;
 }
