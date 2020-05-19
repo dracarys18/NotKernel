@@ -5,6 +5,7 @@ jobs:
       - image: ubuntu:18.04
    steps:
       - run:
+          no_output_timeout: 1h
           command: |
            apt-get -y update && apt-get -y upgrade && apt-get -y install bc build-essential zip curl libstdc++6 git wget python gcc clang libssl-dev repo rsync flex bison
            git config --global user.name "dracarys18"
