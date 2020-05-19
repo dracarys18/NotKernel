@@ -765,7 +765,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wno-tautological-constant-out-of-range-compa
 KBUILD_CFLAGS += $(call cc-option, -mllvm -disable-struct-const-merge)
 KBUILD_CFLAGS += $(call cc-option, -Wno-sometimes-uninitialized)
 KBUILD_CFLAGS += $(call cc-option, -Wno-pointer-to-int-cast)
-
+KBUILD_CFLAGS += $(call cc-option, -Wno-void-pointer-to-int-cast)
 #Dont warn for misleading indentation
 KBUILD_CFLAGS += $(call cc-disable-warning, misleading-indentation)
 
