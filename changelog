@@ -1,15 +1,3 @@
-- Merged 4.14.181 from als
-- RCU backports
-- Moved to LLD linker
-- Moved to  RELR relocation
-- Added Simple LMK from Sultan
-- Enabled few TCP congestion control algorthms and use BBR and default
-- Update touchscreen firmware from MIUI12
-- CPU idle optimisation from Sultan
-- Move UFS,GPU Kgsl processing to big cluster
-- Added devfreq and event based cpu boosting from Sultan
-- Enable Polly LLVM optimisation
-- Enabled Dead code elimination for smaller kernel binary
-- Optimised for sm8150's CPU setup
-
-
+- Merged 4.14.182 LTS
+- Hard code stune boost to 1 for top app processes
+- Added latest LOSFOD support
