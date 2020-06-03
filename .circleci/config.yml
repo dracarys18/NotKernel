@@ -15,7 +15,7 @@ jobs:
            mkdir notkernel
            cd notkernel
            wget https://raw.githubusercontent.com/dracarys18/NotKernel/raphael-10/.circleci/build.sh
-           source build.sh
+           #source build.sh
 workflows:
   version: 2.1
   cooking:
