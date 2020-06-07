@@ -5260,15 +5260,6 @@ static int panel_disp_param_send_lock(struct dsi_panel *panel, int param)
 		panel->skip_dimmingon = STATE_DIM_RESTORE;
 		panel->hbm_enabled = false;
 		break;
-	case DISPPARAM_DC_ON:
-		pr_info("DC on\n");
-		panel->dc_enable = true;
-		rc = dsi_panel_update_backlight(panel, panel->last_bl_lvl);
-		break;
-	case DISPPARAM_DC_OFF:
-		pr_info("DC off\n");
-		panel->dc_enable = false;
-		rc = dsi_panel_update_backlight(panel, panel->last_bl_lvl);
 	default:
 		break;
 	}
