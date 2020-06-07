@@ -1,3 +1,10 @@
-- Merged 4.14.182 LTS
-- Hard code stune boost to 1 for top app processes
-- Added latest LOSFOD support
+- Merged LTS 4.14.183
+- Added Dynamic stune boost and hardcode top-app dstune boost value to 10
+- Set foreground stune boost to 1
+- Compiled with Full LTO + RELR Relocation + LLD
+- improved fod accuracy
+- Built with CC_OPTIMIZE_FOR_SIZE for reducing size of kernel binary
+- Updated goodix touch firmware
+- boost devfreq for 100ms for touch events 
+- Merged CAF LA.UM.8.1.r1-15100-sm8150.0  tag
+- Many more improvements and optimisations
