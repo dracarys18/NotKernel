@@ -897,12 +897,18 @@ static void write_default_values(struct cgroup_subsys_state *css)
 #endif
 
 #ifdef CONFIG_DYNAMIC_STUNE_BOOST
-static void filterSchedtune(struct schedtune *sti, struct schedtune **sto_p, char *st_name)
+static void filterSchedtune(struct schedtune *sti, struct schedtune **sto_p, char *st_name, char *st_foreground)
 {
 	if (!strncmp(sti->css.cgroup->kn->name, st_name, strlen(st_name))) {
 		sti->sched_boost = 10;
 		*sto_p = sti;
 	}
+/*
+	if (!strncmp(sti->css.cgroup->kn->name, st_foreground, strlen(st_foreground))) {
+                sti->sched_boost = 10;
+                *sto_p = sti;
+        }
+*/
 }
 #endif
 
@@ -928,7 +934,7 @@ schedtune_css_alloc(struct cgroup_subsys_state *parent_css)
 		write_default_values(&allocated_group[idx]->css);
 #endif
 #ifdef CONFIG_DYNAMIC_STUNE_BOOST
-		filterSchedtune(allocated_group[idx], &st_ta, "top-app");
+		filterSchedtune(allocated_group[idx], &st_ta, "top-app","foreground");
 #endif
 	}
 	if (idx == BOOSTGROUPS_COUNT) {
