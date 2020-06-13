@@ -8,7 +8,8 @@ then
 git commit -a --signoff
 elif [ $op == "n" ]
 then
-git commit -am "mido:defconfig regen" --signoff
+git commit -am "raphael_defconfig: Regen" --signoff
 else
 echo "Wrong input"
 fi
+make mrproper
