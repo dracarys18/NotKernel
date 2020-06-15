@@ -1,10 +1,11 @@
-- Merged LTS 4.14.183
-- Added Dynamic stune boost and hardcode top-app dstune boost value to 10
-- Set foreground stune boost to 1
-- Compiled with Full LTO + RELR Relocation + LLD
-- improved fod accuracy
-- Built with CC_OPTIMIZE_FOR_SIZE for reducing size of kernel binary
-- Updated goodix touch firmware
-- boost devfreq for 100ms for touch events 
-- Merged CAF LA.UM.8.1.r1-15100-sm8150.0  tag
-- Many more improvements and optimisations
+- Merged LTS 4.14.184
+- Fixed FOD while DC dimming is on
+- Improved FOD accuracy
+- Fixed kernel panics which was happening due to balancing of perf-critical irq's
+- Upstreamed lz4 compression algorithm and made it default for zram
+- Treewide avoid the usage of Variable length array (https://lwn.net/Articles/749064/)
+- Boost CPU on cold app launches
+- Inline schedutil's up-rate and down-rate limit values with Coral
+- Set the default zram size to 2GB
+- Added Wireguard Support
+- cpuidle improvements 
