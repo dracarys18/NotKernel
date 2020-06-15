@@ -689,6 +689,9 @@ static ssize_t up_rate_limit_us_store(struct gov_attr_set *attr_set,
 	if (kstrtouint(buf, 10, &rate_limit_us))
 		return -EINVAL;
 
+	if(rate_limit_us < CONFIG_UP_RATE_LIMIT_US && task_is_booster(current))
+		return count;
+
 	tunables->up_rate_limit_us = rate_limit_us;
 
 	list_for_each_entry(sg_policy, &attr_set->policy_list, tunables_hook) {
@@ -708,6 +711,9 @@ static ssize_t down_rate_limit_us_store(struct gov_attr_set *attr_set,
 
 	if (kstrtouint(buf, 10, &rate_limit_us))
 		return -EINVAL;
+
+	if (rate_limit_us < CONFIG_DOWN_RATE_LIMIT_US && task_is_booster(current))
+		return count;
 
 	tunables->down_rate_limit_us = rate_limit_us;
 
@@ -995,9 +1001,8 @@ static int sugov_init(struct cpufreq_policy *policy)
 
 	tunables->hispeed_load = DEFAULT_HISPEED_LOAD;
 	tunables->hispeed_freq = 0;
-	tunables->up_rate_limit_us = cpufreq_policy_transition_delay_us(policy);
-	tunables->down_rate_limit_us =
-		cpufreq_policy_transition_delay_us(policy);
+	tunables->up_rate_limit_us = CONFIG_UP_RATE_LIMIT_US;
+	tunables->down_rate_limit_us = CONFIG_DOWN_RATE_LIMIT_US;
 
 	policy->governor_data = sg_policy;
 	sg_policy->tunables = tunables;

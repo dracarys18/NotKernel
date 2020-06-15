@@ -230,6 +230,22 @@ config CPU_FREQ_GOV_SCHEDUTIL
 
 	  If in doubt, say N.
 
+if CPU_FREQ_GOV_SCHEDUTIL
+
+config UP_RATE_LIMIT_US
+	int "Up-rate limit for schedutil governor"
+	default 500
+	help
+	  This is to set the default up-rate limit for schedutil governor
+
+config DOWN_RATE_LIMIT_US
+	int "Down-rate limit for schedutil governor"
+	default 20000
+	help
+	  This is to set the default down-rate limit for schedutil governor
+
+endif
+
 config CPU_FREQ_GOV_INTERACTIVE
 	tristate "'interactive' cpufreq policy governor"
 	depends on CPU_FREQ
@@ -249,6 +265,7 @@ config CPU_FREQ_GOV_INTERACTIVE
 	  For details, take a look at linux/Documentation/cpu-freq.
 
 	  If in doubt, say N.
+
 
 config CPU_INPUT_BOOST
 	bool "CPU Input Boost"
