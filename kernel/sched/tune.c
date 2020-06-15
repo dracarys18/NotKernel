@@ -900,7 +900,7 @@ static void write_default_values(struct cgroup_subsys_state *css)
 static void filterSchedtune(struct schedtune *sti, struct schedtune **sto_p, char *st_name, char *st_foreground)
 {
 	if (!strncmp(sti->css.cgroup->kn->name, st_name, strlen(st_name))) {
-		sti->sched_boost = 10;
+		sti->sched_boost = 0;
 		*sto_p = sti;
 	}
 /*
