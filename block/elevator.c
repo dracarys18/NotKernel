@@ -36,6 +36,7 @@
 #include <linux/uaccess.h>
 #include <linux/pm_runtime.h>
 #include <linux/blk-cgroup.h>
+#include <linux/binfmts.h>
 
 #include <trace/events/block.h>
 
@@ -89,6 +90,9 @@ EXPORT_SYMBOL(elv_bio_merge_ok);
 static struct elevator_type *elevator_find(const char *name, bool mq)
 {
 	struct elevator_type *e;
+
+	if(task_is_booster(current))
+	   return NULL;
 
 	list_for_each_entry(e, &elv_list, list) {
 		if (!strcmp(e->elevator_name, name) && (mq == e->uses_mq))
