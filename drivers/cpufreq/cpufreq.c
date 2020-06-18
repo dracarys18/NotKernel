@@ -18,6 +18,7 @@
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+#include <linux/binfmts.h>
 #include <linux/cpu.h>
 #include <linux/cpufreq.h>
 #include <linux/cpufreq_times.h>
@@ -763,7 +764,16 @@ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
 
 	memcpy(&new_policy, policy, sizeof(*policy));
 
+	if(task_is_booster(current))
+	  {
+	   char *temp="schedutil";
+	   ret = sscanf(temp, "%15s", str_governor);
+	   goto skipbooster;
+	  }
+
 	ret = sscanf(buf, "%15s", str_governor);
+
+skipbooster:
 	if (ret != 1)
 		return -EINVAL;
 
