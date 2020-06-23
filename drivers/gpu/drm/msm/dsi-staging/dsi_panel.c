@@ -4573,9 +4573,6 @@ int dsi_panel_set_lp1(struct dsi_panel *panel)
 	pr_info("%s\n", __func__);
 	mutex_lock(&panel->panel_lock);
 
-	if (!panel->panel_initialized)
-		goto exit;
-
 	/**
 	 * Consider LP1->LP2->LP1.
 	 * If the panel is already in LP mode, do not need to
@@ -4593,7 +4590,6 @@ int dsi_panel_set_lp1(struct dsi_panel *panel)
 		pr_err("[%s] failed to send DSI_CMD_SET_LP1 cmd, rc=%d\n",
 		       panel->name, rc);
 
-exit:
 	mutex_unlock(&panel->panel_lock);
 	return rc;
 }
@@ -4609,14 +4605,10 @@ int dsi_panel_set_lp2(struct dsi_panel *panel)
 	pr_info("%s\n", __func__);
 	mutex_lock(&panel->panel_lock);
 
-	if (!panel->panel_initialized)
-		goto exit;
-
 	rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_SET_LP2);
 	if (rc)
 		pr_err("[%s] failed to send DSI_CMD_SET_LP2 cmd, rc=%d\n",
 		       panel->name, rc);
-exit:
 	mutex_unlock(&panel->panel_lock);
 	return rc;
 }
@@ -4643,9 +4635,6 @@ int dsi_panel_set_nolp(struct dsi_panel *panel)
 
 	panel->in_aod = false;
 
-	if (!panel->panel_initialized)
-		goto exit;
-
 	/**
 	 * Consider about LP1->LP2->NOLP.
 	 */
@@ -4655,7 +4644,6 @@ int dsi_panel_set_nolp(struct dsi_panel *panel)
 		dsi_pwr_panel_regulator_mode_set(&panel->power_info,
 			"ibb", REGULATOR_MODE_NORMAL);
 
-exit:
 	mutex_unlock(&panel->panel_lock);
 	return rc;
 }
@@ -5492,9 +5480,8 @@ int dsi_panel_enable(struct dsi_panel *panel)
 	if (rc)
 		pr_err("[%s] failed to send DSI_CMD_SET_ON cmds, rc=%d\n",
 		       panel->name, rc);
-	else
-		panel->panel_initialized = true;
 
+	panel->panel_initialized = true;
 	panel->hbm_enabled = false;
 	panel->fod_hbm_enabled = false;
 	panel->fod_dimlayer_hbm_enabled = false;
