@@ -326,6 +326,12 @@ config MIN_FREQ_PERF
 	default "0"
 	help
 	  Min freq to set for hp cluster when boost is over.
+
+config MIN_FREQ_PERFP
+	int "Perf cluster min freq"
+	default "0"
+	help
+	   Min freq to set for perf cluster
 endif
 
 comment "CPU frequency scaling drivers"
