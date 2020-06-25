@@ -1,11 +1,12 @@
-- Merged LTS 4.14.184
-- Fixed FOD while DC dimming is on
-- Improved FOD accuracy
-- Fixed kernel panics which was happening due to balancing of perf-critical irq's
-- Upstreamed lz4 compression algorithm and made it default for zram
-- Treewide avoid the usage of Variable length array (https://lwn.net/Articles/749064/)
-- Boost CPU on cold app launches
-- Inline schedutil's up-rate and down-rate limit values with Coral
-- Set the default zram size to 2GB
-- Added Wireguard Support
-- cpuidle improvements 
+- Merged 4.14.185 LTS
+- Now shipping with Embedded dtbo
+- Added measured OPP capacities to the EAS energy model
+- Blocked userspace from changing the governor thus fixed in some roms the userspace setting
+the governor of prime cluster to performance.
+- ion and iommu optimisations from Sultan.
+- Removed some bloats from schedutil governor
+- Fixed performance regressions on enabling DC dimming.
+- Allowed panel to cut off physical power during idle screen
+- CFQ IOsched improvements
+- Changed the minfreq on unboosting to optimal frequencies 
+acc to kdrag0n's tests (https://docs.google.com/spreadsheets/d/1gOG4MVDzOvfAtXzifL0EQm-BPHdGkZ9SHThybRpm6R8/edit)
