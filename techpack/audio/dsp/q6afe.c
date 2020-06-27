@@ -624,10 +624,12 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 		else
 			return -EINVAL;
 	} else if (data->opcode == ULTRASOUND_OPCODE) {
+#if 0
 		if (NULL != data->payload)
 			elliptic_process_apr_payload(data->payload);
 		else
 			pr_err("[EXPORT_SYMBOLLUS]: payload ptr is Invalid");
+#endif
 	} else if (data->opcode == AFE_EVENT_MBHC_DETECTION_SW_WA) {
 		msm_aud_evt_notifier_call_chain(SWR_WAKE_IRQ_EVENT, NULL);
 	} else if (data->opcode ==
