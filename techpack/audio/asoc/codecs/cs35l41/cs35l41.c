@@ -2,6 +2,7 @@
  * cs35l41.c -- CS35l41 ALSA SoC audio driver
  *
  * Copyright 2018 Cirrus Logic, Inc.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * Author:	David Rhodes	<david.rhodes@cirrus.com>
  *		Brian Austin	<brian.austin@cirrus.com>
@@ -11,7 +12,6 @@
  * published by the Free Software Foundation.
  *
  */
-#define DEBUG 1
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/version.h>
@@ -138,8 +138,6 @@ static const unsigned char cs35l41_bst_k2_table[4][5] = {
 
 static const unsigned char cs35l41_bst_slope_table[4] = {
 					0x75, 0x6B, 0x3B, 0x28};
-
-static int spk_id_get(struct device_node *np);
 
 static int cs35l41_codec_set_sysclk(struct snd_soc_codec *codec,
 				int clk_id, int source, unsigned int freq,
@@ -1648,7 +1646,7 @@ static struct snd_soc_codec_driver soc_codec_dev_cs35l41 = {
 	.idle_bias_off = true,
 };
 
-static int spk_id_get(struct device_node *np)
+int spk_id_get(struct device_node *np)
 {
 	int id;
 	int state;
