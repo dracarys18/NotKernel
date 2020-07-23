@@ -1,10 +1,8 @@
-- Merged 4.14.187 LTS
-- Merged CAF Tag LA.UM.8.1.r1-15400-sm8150.0
-- Reduced max readahead value to 128KB
-- ion driver backports from 4.19.
-- Disabled tracing and debugging which reduced kernel binary size by ~3MB
-- Disabled SELinux audit
-- Silenced all init and healthd log spams
-- CFQ IOsched improvements
-- Switched to Simple Thermal by Sultan
-- FOD improvements
+- Merged 4.14.189 LTS
+- Updated Audio drivers
+- Binder driver from 4.19 kernel
+- thermal improvements from 4.19 kernel
+- Switched to 250Hz ticker
+- Optimize modulo operation,spinning loop,Checksum routine
+- Boost CPU max for 0.5 second during power key press to rapid up the wakeup process
+
