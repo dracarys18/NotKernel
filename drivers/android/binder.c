@@ -6003,7 +6003,7 @@ int binder_transactions_show(struct seq_file *m, void *unused)
 	return 0;
 }
 
-static int proc_show(struct seq_file *m, void *unused)
+static int __maybe_unused proc_show(struct seq_file *m, void *unused)
 {
 	struct binder_proc *itr;
 	int pid = (unsigned long)m->private;
