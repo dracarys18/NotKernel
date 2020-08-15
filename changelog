@@ -1,8 +1,6 @@
-- Merged 4.14.189 LTS
-- Updated Audio drivers
-- Binder driver from 4.19 kernel
-- thermal improvements from 4.19 kernel
-- Switched to 250Hz ticker
-- Optimize modulo operation,spinning loop,Checksum routine
-- Boost CPU max for 0.5 second during power key press to rapid up the wakeup process
+- Merged 4.14.193 LTS
+- Merged CAF tag LA.UM.8.1.r1-15600-sm8150.0
+- Simple thermal improvements
+- Fixed headphone button not resuming playback in suspend
+- ion driver improvements
 
