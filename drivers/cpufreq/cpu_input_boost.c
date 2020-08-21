@@ -64,7 +64,7 @@ static unsigned int get_max_boost_freq(struct cpufreq_policy *policy)
 	unsigned int freq;
 
 	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		freq = CONFIG_MAX_BOOST_FREQ_LP;
+		freq = policy->max;
 	else if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
 		freq = CONFIG_MAX_BOOST_FREQ_PERF;
 	else
