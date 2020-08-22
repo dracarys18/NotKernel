@@ -1,6 +1,6 @@
-- Merged 4.14.193 LTS
-- Merged CAF tag LA.UM.8.1.r1-15600-sm8150.0
-- Simple thermal improvements
-- Fixed headphone button not resuming playback in suspend
-- ion driver improvements
+- Merged 4.14.194 LTS
+- schedutil improvements
+- boost little cores to their max freq while input boost
+- Marked important display kthreads as perf-critical IRQ
+
 
