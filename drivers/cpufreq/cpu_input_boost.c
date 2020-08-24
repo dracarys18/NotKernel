@@ -10,6 +10,7 @@
 #include <linux/msm_drm_notify.h>
 #include <linux/input.h>
 #include <linux/kthread.h>
+#include <linux/moduleparam.h>
 #include <linux/version.h>
 #include <linux/slab.h>
 
@@ -17,6 +18,9 @@
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
 #include <uapi/linux/sched/types.h>
 #endif
+
+static bool cpu_default_minfreq = false;
+module_param(cpu_default_minfreq, bool, 0644);
 
 enum {
 	SCREEN_OFF,
@@ -215,11 +219,11 @@ static int cpu_notifier_cb(struct notifier_block *nb, unsigned long action,
 	if (test_bit(INPUT_BOOST, &b->state))
 		policy->min = get_input_boost_freq(policy);
 	else if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		policy->min = CONFIG_MIN_FREQ_LP;
+		policy->min = cpu_default_minfreq ? policy->cpuinfo.min_freq:CONFIG_MIN_FREQ_LP;
 	else if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
-		policy->min = CONFIG_MIN_FREQ_PERF;
+		policy->min = cpu_default_minfreq ? policy->cpuinfo.min_freq:CONFIG_MIN_FREQ_PERF;
 	else
-		policy->min = CONFIG_MIN_FREQ_PERFP;
+		policy->min = cpu_default_minfreq ? policy->cpuinfo.min_freq:CONFIG_MIN_FREQ_PERFP;
 
 	return NOTIFY_OK;
 }
