@@ -6342,6 +6342,7 @@ int dsi_display_get_modes(struct dsi_display *display,
 	struct dsi_display_ctrl *ctrl;
 	struct dsi_host_common_cfg *host = &display->panel->host_config;
 	bool is_split_link,is_cmd_mode;
+
 	u32 num_dfps_rates, panel_mode_count, total_mode_count;
 	u32 sublinks_count, mode_idx, array_idx = 0;
 	struct dsi_dyn_clk_caps *dyn_clk_caps;
@@ -6402,22 +6403,22 @@ int dsi_display_get_modes(struct dsi_display *display,
 			goto error;
 		}
 
-		is_cmd_mode = (display_mode.panel_mode == DSI_OP_CMD_MODE);
+		is_cmd_mode = (display->panel->panel_mode == DSI_OP_CMD_MODE);
 
 		/* Calculate dsi frame transfer time */
 		if (is_cmd_mode) {
 			dsi_panel_calc_dsi_transfer_time(
 				&display->panel->host_config,
-				&display_mode, frame_threshold_us);
-			display_mode.priv_info->dsi_transfer_time_us =
-				display_mode.timing.dsi_transfer_time_us;
-			display_mode.priv_info->min_dsi_clk_hz =
-				display_mode.timing.min_dsi_clk_hz;
+				&panel_mode, frame_threshold_us);
+			panel_mode.priv_info->dsi_transfer_time_us =
+				panel_mode.timing.dsi_transfer_time_us;
+			panel_mode.priv_info->min_dsi_clk_hz =
+				panel_mode.timing.min_dsi_clk_hz;
 
-			display_mode.priv_info->mdp_transfer_time_us =
-				display_mode.priv_info->dsi_transfer_time_us;
-			display_mode.timing.mdp_transfer_time_us =
-				display_mode.timing.dsi_transfer_time_us;
+			panel_mode.priv_info->mdp_transfer_time_us =
+				panel_mode.priv_info->dsi_transfer_time_us;
+			panel_mode.timing.mdp_transfer_time_us =
+				panel_mode.timing.dsi_transfer_time_us;
 		}
 
 		is_split_link = host->split_link.split_link_enabled;
