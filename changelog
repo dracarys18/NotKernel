@@ -1,6 +1,8 @@
-- Merged 4.14.194 LTS
-- schedutil improvements
-- boost little cores to their max freq while input boost
-- Marked important display kthreads as perf-critical IRQ
+- Merged 4.14.195 LTS
+- Merged CAF Tag LA.UM.8.1.r1-15800-sm8150.0
+- boost cpu during dt2w to rapid up wake up process
+- added a toggle to choose whether you want natural minimum frequency as minfreq or custom one
+- PELT improvements
+
 
 
