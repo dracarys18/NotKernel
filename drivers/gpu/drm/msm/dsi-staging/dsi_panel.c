@@ -815,6 +815,20 @@ ssize_t dsi_panel_get_doze_backlight(struct dsi_display *display, char *buf)
 	return rc;
 }
 
+bool dc_skip_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
+{
+	/* 1. dc enable is 1;
+	 * 2. bl_lvl should be less than dc threshold;
+	 * 3. bl_lvl is not 0, we should not skip set 0;
+	 * When meet all the 3 conditions at the same time, skip set bl.
+	 */
+	if (panel->dc_enable &&
+		(bl_lvl < panel->dc_threshold) && (bl_lvl != 0))
+		return true;
+	else
+		return false;
+}
+
 int dsi_panel_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
 {
 	int rc = 0;
@@ -826,6 +840,9 @@ int dsi_panel_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
 
 	if (0 == bl_lvl)
 		dsi_panel_tx_cmd_set(panel, DSI_CMD_SET_DISP_DIMMINGOFF);
+
+	if (dc_skip_set_backlight(panel, bl_lvl))
+                return rc;
 
 	if (panel->bl_config.bl_remap_flag && panel->bl_config.brightness_max_level
 		&& panel->bl_config.bl_max_level) {
