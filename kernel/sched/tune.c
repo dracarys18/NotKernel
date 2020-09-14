@@ -871,9 +871,9 @@ static void write_default_values(struct cgroup_subsys_state *css)
 	static struct st_data st_targets[] = {
 		{ "audio-app",	0, 0, 0, 0 },
 		{ "background",	0, 0, 0, 0 },
-		{ "foreground",	0, 0, 0, 1 },
+		{ "foreground",	1, 0, 0, 1 },
 		{ "rt",		0, 0, 0, 0 },
-		{ "top-app",	0, 1, 0, 1 },
+		{ "top-app",	10, 1, 0, 1 },
 	};
 	int i;
 
@@ -900,15 +900,15 @@ static void write_default_values(struct cgroup_subsys_state *css)
 static void filterSchedtune(struct schedtune *sti, struct schedtune **sto_p, char *st_name, char *st_foreground)
 {
 	if (!strncmp(sti->css.cgroup->kn->name, st_name, strlen(st_name))) {
-		sti->sched_boost = 5;
+		sti->sched_boost = 0;
 		*sto_p = sti;
 	}
-
+/*
 	if (!strncmp(sti->css.cgroup->kn->name, st_foreground, strlen(st_foreground))) {
-                sti->sched_boost = 1;
+                sti->sched_boost = 10;
                 *sto_p = sti;
         }
-
+*/
 }
 #endif
 
