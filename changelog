@@ -1,8 +1,12 @@
-- Merged 4.14.195 LTS
-- Merged CAF Tag LA.UM.8.1.r1-15800-sm8150.0
-- boost cpu during dt2w to rapid up wake up process
-- added a toggle to choose whether you want natural minimum frequency as minfreq or custom one
-- PELT improvements
+- Merged 4.14.198 LTS
+- Fixed alarmtimers failing on wakeup
+- simple-thermal: reduce the polling interval to 1 second
+- Added support for gaming mode (do echo '1 0 0 0' >/sys/devices/platform/goodix_ts.0/game_mode for
+180Hz touch sampling rate)
+- Balanced schedutil rate-limit threshhold values
+- Enabled Joystick support
+- Idle improvements
+
 
 
 
