@@ -2063,7 +2063,7 @@ static int sde_connector_atomic_check(struct drm_connector *connector,
 	return 0;
 }
 
-static irqreturn_t esd_err_irq_handle(int irq, void *data)
+static irqreturn_t __maybe_unused esd_err_irq_handle(int irq, void *data)
 {
 	struct sde_connector *c_conn = data;
 	struct drm_event event;

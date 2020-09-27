@@ -257,9 +257,9 @@ static void cpu_input_boost_input_event(struct input_handle *handle,
 {
 	struct boost_drv *b = handle->handler->private;
 
-	if ((type == EV_KEY && code == KEY_POWER)||
-             (type == EV_KEY && code == KEY_WAKEUP)&& value == 1 &&
-	    !(test_bit(SCREEN_OFF, &b->state)))
+	if (((type == EV_KEY && code == KEY_POWER))||
+            ((type == EV_KEY && code == KEY_WAKEUP))&& (value == 1) &&
+	    (!(test_bit(SCREEN_OFF, &b->state))))
 		__cpu_input_boost_kick_max(b,500);
 
 	__cpu_input_boost_kick(b);
