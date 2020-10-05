@@ -22,6 +22,9 @@
 static bool cpu_default_minfreq = false;
 module_param(cpu_default_minfreq, bool, 0644);
 
+static bool input_boost_enable = true;
+module_param(input_boost_enable, bool, 0644);
+
 enum {
 	SCREEN_OFF,
 	INPUT_BOOST,
@@ -97,7 +100,7 @@ static void update_online_cpu_policy(void)
 
 static void __cpu_input_boost_kick(struct boost_drv *b)
 {
-	if (test_bit(SCREEN_OFF, &b->state) || (CONFIG_INPUT_BOOST_DURATION_MS == 0))
+	if (test_bit(SCREEN_OFF, &b->state) || (CONFIG_INPUT_BOOST_DURATION_MS == 0) || !input_boost_enable)
 		return;
 
 	set_bit(INPUT_BOOST, &b->state);
@@ -119,7 +122,7 @@ static void __cpu_input_boost_kick_max(struct boost_drv *b,
 	unsigned long boost_jiffies = msecs_to_jiffies(duration_ms);
 	unsigned long curr_expires, new_expires;
 
-	if (test_bit(SCREEN_OFF, &b->state))
+	if (test_bit(SCREEN_OFF, &b->state) || !input_boost_enable)
 		return;
 
 	do {
