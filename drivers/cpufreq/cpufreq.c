@@ -22,6 +22,7 @@
 #include <linux/cpu.h>
 #include <linux/cpufreq.h>
 #include <linux/cpufreq_times.h>
+#include <linux/cpu_input_boost.h>
 #include <linux/delay.h>
 #include <linux/device.h>
 #include <linux/init.h>
@@ -726,11 +727,14 @@ static ssize_t store_##file_name					\
 (struct cpufreq_policy *policy, const char *buf, size_t count)		\
 {									\
 	int ret, temp;							\
-	struct cpufreq_policy new_policy;				\
+	struct cpufreq_policy new_policy;                               \
 									\
+	if(!is_boost_enable())						\
+		goto skip;						\
 	if (&policy->object == &policy->min &&				\
 	    task_is_booster(current))					\
 		return count;						\
+skip:									\
 	if (&policy->object == &policy->max)				\
 		return count;						\
 									\
