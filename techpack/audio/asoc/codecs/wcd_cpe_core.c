@@ -2257,7 +2257,6 @@ static int fill_cmi_header(struct cmi_hdr *hdr,
 		return -EINVAL;
 	}
 
-	hdr->hdr_info = 0;
 	CMI_HDR_SET_SESSION(hdr, session_id);
 	CMI_HDR_SET_SERVICE(hdr, service_id);
 	if (version)
@@ -3606,7 +3605,6 @@ static int wcd_cpe_lsm_eob(
 	int ret = 0;
 	struct cmi_hdr lab_eob;
 
-	memset(&lab_eob, 0, sizeof(lab_eob));
 	if (fill_lsm_cmd_header_v0_inband(&lab_eob, session->id,
 		0, CPE_LSM_SESSION_CMD_EOB)) {
 		return -EINVAL;

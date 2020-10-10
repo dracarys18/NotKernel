@@ -42,8 +42,6 @@ MODULE_PARM_DESC(rmnet_shs_cpu_prio_dur, "Priority ignore duration (wq intervals
 
 #define PRIO_BACKOFF ((!rmnet_shs_cpu_prio_dur) ? 2 : rmnet_shs_cpu_prio_dur)
 
-#define RMNET_SHS_SEGS_PER_SKB_DEFAULT (2)
-
 unsigned int rmnet_shs_wq_interval_ms __read_mostly = RMNET_SHS_WQ_INTERVAL_MS;
 module_param(rmnet_shs_wq_interval_ms, uint, 0644);
 MODULE_PARM_DESC(rmnet_shs_wq_interval_ms, "Interval between wq runs (ms)");
@@ -296,7 +294,6 @@ void rmnet_shs_wq_hstat_reset_node(struct rmnet_shs_wq_hstat_s *hnode)
 	hnode->hash = 0;
 	hnode->suggested_cpu = 0;
 	hnode->current_cpu = 0;
-	hnode->segs_per_skb = 0;
 	hnode->skb_tport_proto = 0;
 	hnode->stat_idx = -1;
 	INIT_LIST_HEAD(&hnode->cpu_node_id);
@@ -410,12 +407,11 @@ void rmnet_shs_wq_create_new_flow(struct rmnet_shs_skbn_s *node_p)
 		node_p->hstats->skb_tport_proto = node_p->skb_tport_proto;
 		node_p->hstats->current_cpu = node_p->map_cpu;
 		node_p->hstats->suggested_cpu = node_p->map_cpu;
-		/* Set egmentation off  by default */
-		node_p->hstats->segs_per_skb = 0;
+
 		/* Start TCP flows with segmentation if userspace connected */
 		if (rmnet_shs_userspace_connected &&
 		    node_p->hstats->skb_tport_proto == IPPROTO_TCP)
-			node_p->hstats->segs_per_skb = RMNET_SHS_SEGS_PER_SKB_DEFAULT;
+			node_p->hstats->segment_enable = 1;
 
 		node_p->hstats->node = node_p;
 		node_p->hstats->c_epoch = RMNET_SHS_SEC_TO_NSEC(time.tv_sec) +
@@ -1212,7 +1208,6 @@ int rmnet_shs_wq_check_cpu_move_for_ep(u16 current_cpu, u16 dest_cpu,
 				       struct rmnet_shs_wq_ep_s *ep)
 {
 	u16 cpu_in_rps_mask = 0;
-	u16 __cpu_isolated_mask = 0;
 
 	if (!ep) {
 		rmnet_shs_crit_err[RMNET_SHS_WQ_EP_ACCESS_ERR]++;
@@ -1227,7 +1222,7 @@ int rmnet_shs_wq_check_cpu_move_for_ep(u16 current_cpu, u16 dest_cpu,
 	cpu_in_rps_mask = (1 << dest_cpu) & ep->rps_config_msk;
 
 	rm_err("SHS_MASK:  cur cpu [%d] | dest_cpu [%d] | "
-	       "cpu isolation_mask = 0x%d | ep_rps_mask = 0x%d | "
+	       "cpu isolation_mask = 0x%x | ep_rps_mask = 0x%x | "
 	       "cpu_online(dest) = %d cpu_in_rps_mask = %d | "
 	       "cpu isolated(dest) = %d",
 	       current_cpu, dest_cpu, __cpu_isolated_mask, ep->rps_config_msk,
@@ -1296,7 +1291,7 @@ int rmnet_shs_wq_try_to_move_flow(u16 cur_cpu, u16 dest_cpu, u32 hash_to_move,
 }
 
 /* Change flow segmentation, return 1 if set, 0 otherwise */
-int rmnet_shs_wq_set_flow_segmentation(u32 hash_to_set, u8 segs_per_skb)
+int rmnet_shs_wq_set_flow_segmentation(u32 hash_to_set, u8 seg_enable)
 {
 	struct rmnet_shs_skbn_s *node_p;
 	struct rmnet_shs_wq_hstat_s *hstat_p;
@@ -1316,22 +1311,22 @@ int rmnet_shs_wq_set_flow_segmentation(u32 hash_to_set, u8 segs_per_skb)
 		if (hstat_p->hash != hash_to_set)
 			continue;
 
-		rm_err("SHS_HT: >> segmentation on hash 0x%x segs_per_skb %u",
-		       hash_to_set, segs_per_skb);
+		rm_err("SHS_HT: >> segmentation on hash 0x%x enable %u",
+		       hash_to_set, seg_enable);
 
 		trace_rmnet_shs_wq_high(RMNET_SHS_WQ_FLOW_STATS,
 				RMNET_SHS_WQ_FLOW_STATS_SET_FLOW_SEGMENTATION,
-				hstat_p->hash, segs_per_skb,
+				hstat_p->hash, seg_enable,
 				0xDEF, 0xDEF, hstat_p, NULL);
 
-		node_p->hstats->segs_per_skb = segs_per_skb;
+		node_p->hstats->segment_enable = seg_enable;
 		spin_unlock_irqrestore(&rmnet_shs_ht_splock, ht_flags);
 		return 1;
 	}
 	spin_unlock_irqrestore(&rmnet_shs_ht_splock, ht_flags);
 
-	rm_err("SHS_HT: >> segmentation on hash 0x%x segs_per_skb %u not set - hash not found",
-	       hash_to_set, segs_per_skb);
+	rm_err("SHS_HT: >> segmentation on hash 0x%x enable %u not set - hash not found",
+	       hash_to_set, seg_enable);
 	return 0;
 }
 
@@ -1971,7 +1966,7 @@ void rmnet_shs_wq_filter(void)
 			continue;
 		}
 
-		if (hnode->node->hstats->segs_per_skb > 0) {
+		if (hnode->node->hstats->segment_enable) {
 			rmnet_shs_cpu_node_tbl[cur_cpu].seg++;
 		}
 	}
@@ -2008,7 +2003,7 @@ void rmnet_shs_wq_update_stats(void)
 				}
 			} else {
 				/* Disable segmentation if userspace gets disconnected connected */
-				hnode->node->hstats->segs_per_skb = 0;
+				hnode->node->hstats->segment_enable = 0;
 			}
 		}
 	}
@@ -2156,7 +2151,8 @@ void rmnet_shs_wq_init(struct net_device *dev)
 
 	trace_rmnet_shs_wq_high(RMNET_SHS_WQ_INIT, RMNET_SHS_WQ_INIT_START,
 				0xDEF, 0xDEF, 0xDEF, 0xDEF, NULL, NULL);
-	rmnet_shs_wq = alloc_workqueue("rmnet_shs_wq", WQ_CPU_INTENSIVE, 1);
+	rmnet_shs_wq = alloc_workqueue("rmnet_shs_wq",
+					WQ_MEM_RECLAIM | WQ_CPU_INTENSIVE, 1);
 	if (!rmnet_shs_wq) {
 		rmnet_shs_crit_err[RMNET_SHS_WQ_ALLOC_WQ_ERR]++;
 		return;
@@ -2237,7 +2233,7 @@ int rmnet_shs_wq_get_max_flows_per_cluster(u16 cpu)
 		end_core = MAX_CPUS;
 	}
 
-	for (start_core = 0; start_core < end_core; start_core++) {
+	for (start_core; start_core < end_core; start_core++) {
 		cpu_flows = rmnet_shs_wq_get_num_cpu_flows(start_core);
 		if (cpu_flows > max_flows)
 			max_flows = cpu_flows;

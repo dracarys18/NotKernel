@@ -534,7 +534,7 @@ static int wcd9xxx_irq_setup_downstream_irq(
 int wcd9xxx_irq_init(struct wcd9xxx_core_resource *wcd9xxx_res)
 {
 	int i, ret;
-	u8 irq_level[wcd9xxx_res->num_irq_regs];
+	u8 *irq_level;
 	struct irq_domain *domain;
 	struct device_node *pnode;
 
@@ -574,7 +574,7 @@ int wcd9xxx_irq_init(struct wcd9xxx_core_resource *wcd9xxx_res)
 	wcd9xxx_res->irq_level_high[0] = true;
 
 	/* mask all the interrupts */
-	memset(irq_level, 0, wcd9xxx_res->num_irq_regs);
+	irq_level = kcalloc(wcd9xxx_res->num_irq_regs, sizeof(u8), GFP_KERNEL);
 	for (i = 0; i < wcd9xxx_res->num_irqs; i++) {
 		wcd9xxx_res->irq_masks_cur[BIT_BYTE(i)] |= BYTE_BIT_MASK(i);
 		wcd9xxx_res->irq_masks_cache[BIT_BYTE(i)] |= BYTE_BIT_MASK(i);
@@ -619,11 +619,14 @@ int wcd9xxx_irq_init(struct wcd9xxx_core_resource *wcd9xxx_res)
 	if (ret)
 		goto fail_irq_init;
 
+	kfree(irq_level);
+
 	return ret;
 
 fail_irq_init:
 	dev_err(wcd9xxx_res->dev,
 			"%s: Failed to init wcd9xxx irq\n", __func__);
+	kfree(irq_level);
 	wcd9xxx_irq_put_upstream_irq(wcd9xxx_res);
 	mutex_destroy(&wcd9xxx_res->irq_lock);
 	mutex_destroy(&wcd9xxx_res->nested_irq_lock);
@@ -636,14 +639,10 @@ int wcd9xxx_request_irq(struct wcd9xxx_core_resource *wcd9xxx_res,
 			const char *name, void *data)
 {
 	int virq;
-	int flags = IRQF_TRIGGER_RISING;
 
 	virq = phyirq_to_virq(wcd9xxx_res, irq);
 
-	if (!strncmp(name, "Button ", strlen("Button") + 1))
-		flags |= IRQF_NO_SUSPEND;
-
-	return request_threaded_irq(virq, NULL, handler, flags,
+	return request_threaded_irq(virq, NULL, handler, IRQF_TRIGGER_RISING,
 				    name, data);
 }
 EXPORT_SYMBOL(wcd9xxx_request_irq);

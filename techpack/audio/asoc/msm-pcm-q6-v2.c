@@ -1693,6 +1693,9 @@ static int msm_pcm_chmap_ctl_get(struct snd_kcontrol *kcontrol,
 		return -EINVAL;
 	}
 
+	memset(ucontrol->value.integer.value, 0,
+		sizeof(ucontrol->value.integer.value));
+
 	mutex_lock(&pdata->lock);
 	prtd = substream->runtime->private_data;
 
@@ -1928,7 +1931,7 @@ static int msm_pcm_path_latency_ctl_get(struct snd_kcontrol *kcontrol,
 		return -EINVAL;
 	}
 	if (!substream->runtime) {
-		pr_err("%s substream runtime not found\n", __func__);
+		pr_debug("%s substream runtime not found\n", __func__);
 		return -EINVAL;
 	}
 
