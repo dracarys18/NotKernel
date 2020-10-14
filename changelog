@@ -1,7 +1,6 @@
-- 4.14.199 LTS
-- Merged LA.UM.8.1.r1-16000-sm8150.0 CAF Tag
-- Enabled XBox Gamepad support
-- Added timeout protection for boosting devfreq while commiting a new frame such that it wont boost when there's no user
-interaction with the phone for 3.2 seconds.
-- sched improvements
-- UFS driver improvements from Coral
+- 4.14.201 LTS
+- Fixed sound stuttering
+- Fixed FOD not working during PIP
+- Added an option to disable cpu boost
+- FOD improvements during AOD
+
