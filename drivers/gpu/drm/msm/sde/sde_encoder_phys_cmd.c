@@ -1477,7 +1477,7 @@ static void sde_encoder_phys_cmd_ctl_start_work(struct work_struct *work)
 							    typeof(*cmd_enc),
 							    ctl_wait_work);
 
-	_sde_encoder_phys_cmd_wait_for_wr_ptr(&cmd_enc->base);
+	_sde_encoder_phys_cmd_wait_for_ctl_start(&cmd_enc->base);
 }
 
 static int sde_encoder_phys_cmd_wait_for_tx_complete(
@@ -1514,9 +1514,9 @@ static int sde_encoder_phys_cmd_wait_for_commit_done(
 
 	/* only required for master controller */
 	if (sde_encoder_phys_cmd_is_master(phys_enc))
-		rc = _sde_encoder_phys_cmd_wait_for_ctl_start(phys_enc);
+		queue_work(system_unbound_wq, &cmd_enc->ctl_wait_work);
 
-	if (!rc && sde_encoder_phys_cmd_is_master(phys_enc) &&
+	if (sde_encoder_phys_cmd_is_master(phys_enc) &&
 			cmd_enc->autorefresh.cfg.enable)
 		rc = _sde_encoder_phys_cmd_wait_for_autorefresh_done(phys_enc);
 
