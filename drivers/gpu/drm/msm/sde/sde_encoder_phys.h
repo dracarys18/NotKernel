@@ -379,12 +379,12 @@ struct sde_encoder_phys_cmd_autorefresh {
  * struct sde_encoder_phys_cmd - sub-class of sde_encoder_phys to handle command
  *	mode specific operations
  * @base:	Baseclass physical encoder structure
+ * @intf_idx:	Intf Block index used by this phys encoder
  * @stream_sel:	Stream selection for multi-stream interfaces
  * @pp_timeout_report_cnt: number of pingpong done irq timeout errors
  * @autorefresh: autorefresh feature state
  * @pending_vblank_cnt: Atomic counter tracking pending wait for VBLANK
  * @pending_vblank_wq: Wait queue for blocking until VBLANK received
- * @wr_ptr_wait_success: log wr_ptr_wait success for release fence trigger
  */
 struct sde_encoder_phys_cmd {
 	struct sde_encoder_phys base;
@@ -395,7 +395,6 @@ struct sde_encoder_phys_cmd {
 	wait_queue_head_t pending_vblank_wq;
 	u32 ctl_start_threshold;
 	struct work_struct ctl_wait_work;
-	bool wr_ptr_wait_success;
 };
 
 /**
