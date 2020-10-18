@@ -226,7 +226,7 @@ static void devfreq_boost_input_event(struct input_handle *handle,
 	int i;
 
 	for (i = 0; i < DEVFREQ_MAX; i++)
-		__devfreq_boost_kick_max(d->devices + i,100);
+		__devfreq_boost_kick(d->devices + i);
 
 	d->last_input_jiffies = jiffies;
 }
