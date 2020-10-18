@@ -1,6 +1,4 @@
-- 4.14.201 LTS
-- Fixed sound stuttering
-- Fixed FOD not working during PIP
-- Added an option to disable cpu boost
-- FOD improvements during AOD
+- 4.14.202 LTS
+- Reverted bunch of caf commits that was causing occassional UI stutters
+- idle improvements
 
