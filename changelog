@@ -1,7 +1,4 @@
-- 4.14.203 LTS
-- Merged LA.UM.8.1.r1-16200-sm8150.0 CAF tag
-- CPU idle improvements
-- SCHED Improvements
-- Disabled Stune utilization boosting such that stune boost would only mean 
-biasing the CPU towards higher capacity CPUs without affecting the cpu frequencies
+- 4.14.206 LTS
+- Reverted bunch of UFS commits that was causing idle drain
+- sched improvements
 
