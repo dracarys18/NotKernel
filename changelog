@@ -1,4 +1,5 @@
-- 4.14.206 LTS
-- Reverted bunch of UFS commits that was causing idle drain
-- sched improvements
-
+- 4.14.209 LTS
+- Enabled BPF JIT compiler
+- Enabled Ultra Low Power State support for display panels
+- Disabled idle-prediction feature
+- Enabled sched NEXT_BUDDY feature for increased cache locality

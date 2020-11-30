@@ -1,13 +1,14 @@
 {
   "kernel": {
     "name": "NotKernel",
-    "version": "R17",
-    "link": "https://github.com/dracarys18/NotKernel/releases/download/R17/NotKernel-Raphael-2020-11-13-19-signed.zip",
+    "version": "R18",
+    "link": "https://github.com/dracarys18/NotKernel/releases/download/R18/NotKernel-Raphael-2020-11-30-42-signed.zip",
     "changelog_url": "https://raw.githubusercontent.com/dracarys18/NotKernel/raphael-10/changelog",
-    "date": "2020-11-13",
-    "sha1": "b38c4e1634f067aa6febbda419f00d21c1d34385"
+    "date": "2020-11-30",
+    "sha1": "d9eaecb4f7dedee54c326baa9524e14ada27fb86"
   },
   "support": {
     "link": "https://t.me/notkernel"
   }
 }
+
