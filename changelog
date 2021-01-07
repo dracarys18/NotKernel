@@ -1,5 +1,4 @@
-- 4.14.209 LTS
-- Enabled BPF JIT compiler
-- Enabled Ultra Low Power State support for display panels
-- Disabled idle-prediction feature
-- Enabled sched NEXT_BUDDY feature for increased cache locality
+- 4.14.213 LTS
+- Merged CAF tag LA.UM.8.1.r1-16600-sm8150.0
+- touchscreen, fingerprint IRQ's affined to prime cluster
+
